@@ -1,8 +1,13 @@
 // ---------------------------------------------------------
-// Glass Mesh Background Generator
+// Glass Mesh Background Generator (Optimized)
 // ---------------------------------------------------------
 
+let glassBackgroundInitialized = false;
+
 function initGlassBackground() {
+  if (glassBackgroundInitialized) return;
+  glassBackgroundInitialized = true;
+  
   // 1. Create the container
   const container = document.createElement('div');
   container.id = 'glass-bg-container';
@@ -61,17 +66,20 @@ function initGlassBackground() {
 
   // 2. Add Ambient Glow Orbs (so the glass has something to refract)
   const colors = ['#8A2BE2', '#4169E1', '#00FFFF', '#FF00FF'];
+  const orbFragment = document.createDocumentFragment();
   for(let i=0; i<4; i++) {
     const orb = document.createElement('div');
     orb.className = 'glow-orb';
-    orb.style.width = Math.random() * 400 + 300 + 'px';
-    orb.style.height = orb.style.width;
+    const size = Math.random() * 400 + 300;
+    orb.style.width = size + 'px';
+    orb.style.height = size + 'px';
     orb.style.background = colors[i % colors.length];
     orb.style.left = Math.random() * 80 + '%';
     orb.style.top = Math.random() * 80 + '%';
     orb.style.animationDuration = (Math.random() * 10 + 15) + 's';
-    container.appendChild(orb);
+    orbFragment.appendChild(orb);
   }
+  container.appendChild(orbFragment);
 
   // 3. Generate the Triangle Mesh
   // We create a grid of points, then connect them
@@ -103,6 +111,7 @@ function initGlassBackground() {
 
   // Create Triangles from points
   // Logic: For every square in the grid, split it into 2 triangles
+  const triangleFragment = document.createDocumentFragment();
   for (let y = 0; y < rows; y++) {
     for (let x = 0; x < cols; x++) {
       const p1 = points[y][x];         // Top-Left
@@ -111,12 +120,13 @@ function initGlassBackground() {
       const p4 = points[y+1][x+1];     // Bottom-Right
 
       // Triangle 1 (Top-Left, Top-Right, Bottom-Left)
-      createTriangle(container, p1, p2, p3);
+      createTriangle(triangleFragment, p1, p2, p3);
 
       // Triangle 2 (Top-Right, Bottom-Right, Bottom-Left)
-      createTriangle(container, p2, p4, p3);
+      createTriangle(triangleFragment, p2, p4, p3);
     }
   }
+  container.appendChild(triangleFragment);
 
   document.body.prepend(container);
 }
@@ -140,50 +150,52 @@ function createTriangle(parent, p1, p2, p3) {
 }
 
 // ---------------------------------------------------------
-// Animate Skill Bars
+// Animate Skill Bars (Optimized with Intersection Observer)
 // ---------------------------------------------------------
 
-function animateSkillBars() {
-  const skillItems = document.querySelectorAll('.skill-item');
-  const radialSkills = document.querySelectorAll('.radial-skill');
-  
-  // Animate linear bars
-  skillItems.forEach(item => {
-    const percent = item.getAttribute('data-percent');
-    const barFill = item.querySelector('.skill-bar-fill');
-    
-    if (barFill && percent) {
-      setTimeout(() => {
-        barFill.style.width = percent + '%';
-      }, 100);
-    }
-  });
+let skillAnimationTriggered = false;
 
-  // Animate circular progress rings
-  radialSkills.forEach(item => {
-    const percent = item.getAttribute('data-percent');
-    const ringElement = item.querySelector('.radial-bar-ring');
-    
-    if (ringElement && percent) {
-      // Circle circumference: 2 * π * r = 2 * π * 60 ≈ 376.99
-      const circumference = 376.99;
-      const fillLength = (percent / 100) * circumference;
+function animateSkillBars() {
+  const skillContainer = document.querySelector('.skills-grid');
+  if (!skillContainer) return;
+  
+  const observer = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting && !skillAnimationTriggered) {
+      skillAnimationTriggered = true;
+      observer.disconnect();
       
-      // Set initial state
-      ringElement.style.strokeDasharray = `${circumference}`;
-      ringElement.style.strokeDashoffset = `${circumference}`;
-      
-      // Animate to filled state
-      setTimeout(() => {
-        ringElement.style.strokeDashoffset = `${circumference - fillLength}`;
-      }, 100);
+      // Animate linear bars
+      document.querySelectorAll('.skill-item').forEach(item => {
+        const percent = item.getAttribute('data-percent');
+        const barFill = item.querySelector('.skill-bar-fill');
+        if (barFill && percent) {
+          barFill.style.width = percent + '%';
+        }
+      });
+
+      // Animate circular progress rings
+      document.querySelectorAll('.radial-skill').forEach(item => {
+        const percent = item.getAttribute('data-percent');
+        const ringElement = item.querySelector('.radial-bar-ring');
+        if (ringElement && percent) {
+          const circumference = 376.99;
+          const fillLength = (percent / 100) * circumference;
+          ringElement.style.strokeDasharray = `${circumference}`;
+          ringElement.style.strokeDashoffset = `${circumference - fillLength}`;
+        }
+      });
     }
-  });
+  }, { threshold: 0.1 });
+  
+  observer.observe(skillContainer);
 }
 
 // ---------------------------------------------------------
-// Animate Hero Text on Scroll
+// Animate Hero Text on Scroll (Optimized with RAF)
 // ---------------------------------------------------------
+
+let ticking = false;
+let lastScrollPosition = 0;
 
 function animateHeroText() {
   const heroText = document.querySelector('.hero-overlay-text');
@@ -191,24 +203,36 @@ function animateHeroText() {
   
   if (!heroText || !heroSection) return;
   
-  window.addEventListener('scroll', () => {
+  function updateScroll() {
     const heroHeight = window.innerHeight;
-    const scrollPosition = window.scrollY;
-    const progress = Math.max(0, Math.min(1, scrollPosition / (heroHeight * 0.75)));
-    
-    // Scale from 1 to 0.3 as you scroll
+    const progress = Math.max(0, Math.min(1, lastScrollPosition / (heroHeight * 0.75)));
     const scale = 1 - (progress * 0.7);
-    // Fade out opacity
     const opacity = 1 - progress;
     
     heroText.style.transform = `translate(-50%, -50%) scale(${scale})`;
     heroText.style.opacity = opacity;
-  });
+    ticking = false;
+  }
+  
+  window.addEventListener('scroll', () => {
+    lastScrollPosition = window.scrollY;
+    if (!ticking) {
+      window.requestAnimationFrame(updateScroll);
+      ticking = true;
+    }
+  }, { passive: true });
 }
 
 // Initialize on page load
-document.addEventListener('DOMContentLoaded', () => {
-  initGlassBackground();
-  animateSkillBars();
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    animateHeroText();
+    animateSkillBars();
+    // Defer glass background to next frame for faster initial render
+    requestAnimationFrame(() => initGlassBackground());
+  });
+} else {
   animateHeroText();
-});
+  animateSkillBars();
+  requestAnimationFrame(() => initGlassBackground());
+}
