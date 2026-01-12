@@ -1,238 +1,433 @@
-// ---------------------------------------------------------
-// Glass Mesh Background Generator (Optimized)
-// ---------------------------------------------------------
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Video Editor Portfolio | Red Thr3d</title>
+    <meta
+      name="description"
+      content="Dark-themed portfolio website for a professional video editor and motion designer. Showcasing projects, skills in Blender, After Effects, and Photoshop, and contact details."
+    />
+    <meta
+      name="keywords"
+      content="video editor, video editing, motion graphics, portfolio, Blender, After Effects, Photoshop, showreel"
+    />
+    <meta name="author" content="Red Thr3d" />
 
-let glassBackgroundInitialized = false;
+    <!-- Open Graph / Social Preview -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Video Editor Portfolio | Red Thr3d" />
+    <meta
+      property="og:description"
+      content="Portfolio of a video editor and motion designer. Explore cinematic edits, motion graphics, and creative storytelling."
+    />
+    <meta property="og:image" content="assets/preview-placeholder.jpg" />
+    <meta property="og:url" content="https://your-portfolio-url.com" />
 
-function initGlassBackground() {
-  if (glassBackgroundInitialized) return;
-  glassBackgroundInitialized = true;
-  
-  // 1. Create the container
-  const container = document.createElement('div');
-  container.id = 'glass-bg-container';
-  
-  // Inject necessary CSS for the background system
-  const style = document.createElement('style');
-  style.textContent = `
-    #glass-bg-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: -1; /* Behind everything */
-      overflow: hidden;
-      background: #0f0f13; /* Dark background base */
-    }
+    <!-- Favicon (optional placeholder) -->
+    <link rel="icon" type="image/png" href="assets/favicon-placeholder.png" />
 
-    /* Distinct glowing orbs behind the glass to make the blur visible */
-    .glow-orb {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(80px);
-      opacity: 0.6;
-      animation: floatOrb 20s infinite alternate ease-in-out;
-    }
+    <!-- Tailwind CSS (CDN) for utility classes & extra animations -->
+    <script src="https://cdn.tailwindcss.com"></script>
 
-    /* The Glass Triangle Class */
-    .glass-poly {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(255, 255, 255, 0.03);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      pointer-events: none; /* Let clicks pass through */
-      transition: all 0.5s ease;
-    }
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="preload" as="image" href="https://images.pexels.com/photos/417173/pexels-photo-417173.jpeg" />
+  </head>
+  <body class="antialiased">
+    <!-- Header / Navigation -->
+    <header class="site-header" id="top">
+      <div class="container header-inner">
+        <div class="logo">
+          <span class="logo-mark animate-pulse"></span>
+          <span class="logo-text">Red<span class="accent">.Thr3d</span></span>
+        </div>
+        <nav class="nav">
+          <button class="nav-toggle" aria-label="Toggle navigation">
+            <span></span>
+            <span></span>
+          </button>
+          <ul class="nav-links">
+            <li><a href="#hero">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
 
-    /* Subtle hover effect on triangles */
-    .glass-poly:hover {
-      background: rgba(255, 255, 255, 0.08);
-      transform: scale(1.02);
-      z-index: 1;
-    }
+    <!-- Hero Image Background (Fixed) -->
+    <div class="hero-image-wrapper">
+      <img 
+        src="https://images.pexels.com/photos/417173/pexels-photo-417173.jpeg" 
+        alt="Hero Background"
+        class="hero-image"
+        loading="eager"
+      />
+    </div>
 
-    @keyframes floatOrb {
-      0% { transform: translate(0, 0) rotate(0deg); }
-      100% { transform: translate(100px, 50px) rotate(20deg); }
-    }
-  `;
-  document.head.appendChild(style);
+    <main>
+      <!-- Hero Content Section -->
+      <section id="hero" class="section hero-section">
+        <div class="container hero-inner">
+          <div class="hero-content">
+            <p class="hero-kicker">Video Editor &amp; Motion Designer</p>
+            <h1 class="hero-title">
+              Crafting cinematic stories<br />
+              <span class="accent">frame by frame.</span>
+            </h1>
+            <p class="hero-subtitle">
+              I help brands, creators, and filmmakers bring their ideas to life through
+              bold edits, dynamic motion graphics, and sound-driven storytelling.
+            </p>
+            <div class="hero-actions">
+              <a
+                href="#contact"
+                class="btn btn-primary shadow-lg shadow-orange-500/40 hover:shadow-orange-500/70 transition duration-300"
+              >
+                Contact Me
+              </a>
+              <a
+                href="#projects"
+                class="btn btn-ghost hover:-translate-y-0.5 transition-transform duration-200"
+              >
+                View Projects
+              </a>
+            </div>
+            <div class="hero-tags">
+              <span>Commercial</span>
+              <span>Music Videos</span>
+              <span>YouTube &amp; Social</span>
+            </div>
+          </div>
+          <div class="hero-media">
+            <div class="hero-card">
+              <video class="hero-video" autoplay muted loop playsinline preload="none">
+                <source src="assets/intro vid.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+              <div class="hero-meta">
+                <p class="hero-meta-title">Showreel 2026</p>
+                <p class="hero-meta-subtitle">Highlights of narrative, commercial, and music edits.</p>
+              </div>
+            </div>
+            <div class="hero-badges">
+              <div class="badge">
+                <span class="badge-label">Experience</span>
+                <span class="badge-value">1+ yrs</span>
+              </div>
+              <div class="badge">
+                <span class="badge-label">Projects</span>
+                <span class="badge-value">20+</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-  // 2. Add Ambient Glow Orbs (so the glass has something to refract)
-  const colors = ['#8A2BE2', '#4169E1', '#00FFFF', '#FF00FF'];
-  const orbFragment = document.createDocumentFragment();
-  for(let i=0; i<4; i++) {
-    const orb = document.createElement('div');
-    orb.className = 'glow-orb';
-    const size = Math.random() * 400 + 300;
-    orb.style.width = size + 'px';
-    orb.style.height = size + 'px';
-    orb.style.background = colors[i % colors.length];
-    orb.style.left = Math.random() * 80 + '%';
-    orb.style.top = Math.random() * 80 + '%';
-    orb.style.animationDuration = (Math.random() * 10 + 15) + 's';
-    orbFragment.appendChild(orb);
-  }
-  container.appendChild(orbFragment);
+      <!-- About Section -->
+      <section id="about" class="section about-section">
+        <div class="container section-header">
+          <p class="section-kicker">About</p>
+          <h2 class="section-title">Who I am &amp; how I edit</h2>
+        </div>
+        <div class="container about-grid">
+          <div class="about-text">
+            <p>
+              I’m a video editor focused on cinematic storytelling, punchy pacing, and
+              sound-driven moments. From short-form social content to full-length brand
+              pieces, I create edits that feel polished, intentional, and emotionally
+              resonant.
+            </p>
+            <p>
+              My workflow combines clean organization, color-consistent grading, and
+              smooth motion graphics to keep every frame working hard. I love collaborating
+              with creative teams, agencies, and solo creators to refine ideas and bring
+              them to screen.
+            </p>
+            <p class="about-highlight">
+              Available for freelance projects, remote collaborations, and long-term
+              partnerships.
+            </p>
+          </div>
+          <div class="about-meta">
+            <div class="meta-item">
+              <span class="meta-label">Based in</span>
+              <span class="meta-value">Ranchi, India</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Specialties</span>
+              <span class="meta-value">Story-driven edits, motion graphics, social cuts</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Tools</span>
+              <span class="meta-value">Blender, After Effects, Photoshop</span>
+            </div>
+          </div>
+        </div>
+      </section>
 
-  // 3. Generate the Triangle Mesh
-  // We create a grid of points, then connect them
-  const cols = 6; // Number of triangles across
-  const rows = 4; // Number of triangles down
-  
-  const width = window.innerWidth;
-  const height = window.innerHeight;
-  const xStep = width / cols;
-  const yStep = height / rows;
+      <!-- Projects / Portfolio Section -->
+      <section id="projects" class="section projects-section">
+        <div class="container section-header">
+          <p class="section-kicker">Projects</p>
+          <h2 class="section-title">Selected work</h2>
+          <p class="section-subtitle">
+            A mix of commercial, music, and creator-driven edits. Replace these with your
+            own thumbnails, titles, and links.
+          </p>
+        </div>
+        <div class="container projects-grid" id="projects-grid">
+          <!-- Video Project 1 -->
+          <div class="project-card">
+            <div class="project-thumb">
+              <video class="project-video" autoplay muted loop preload="none">
+                <source src="assets/web vid 1.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+            </div>
+            <div class="project-meta">
+              <h3 class="project-title">Corporate Brand Video</h3>
+              <p class="project-description">A fast-paced brand narrative showcasing company culture with dynamic cuts and cinematic color grading.</p>
+            </div>
+          </div>
 
-  const points = [];
+          <!-- Video Project 2 -->
+          <div class="project-card">
+            <div class="project-thumb">
+              <video class="project-video" autoplay muted loop preload="none">
+                <source src="assets/web vid 2.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+            </div>
+            <div class="project-meta">
+              <h3 class="project-title">Music Video Production</h3>
+              <p class="project-description">High-energy music video with synced transitions, motion graphics, and vibrant color palette.</p>
+            </div>
+          </div>
 
-  // Generate vertices (grid points)
-  for (let y = 0; y <= rows; y++) {
-    const rowPoints = [];
-    for (let x = 0; x <= cols; x++) {
-      // Add randomness to inner points to make it look "organic"
-      const xOffset = (x === 0 || x === cols) ? 0 : (Math.random() - 0.5) * xStep * 0.8;
-      const yOffset = (y === 0 || y === rows) ? 0 : (Math.random() - 0.5) * yStep * 0.8;
-      
-      rowPoints.push({
-        x: x * xStep + xOffset,
-        y: y * yStep + yOffset
-      });
-    }
-    points.push(rowPoints);
-  }
+          <!-- Video Project 3 -->
+          <div class="project-card">
+            <div class="project-thumb">
+              <video class="project-video" autoplay muted loop preload="none">
+                <source src="assets/web vid 3.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+            </div>
+            <div class="project-meta">
+              <h3 class="project-title">Social Media Campaign</h3>
+              <p class="project-description">Short-form vertical video content optimized for Instagram Reels and TikTok with trending effects.</p>
+            </div>
+          </div>
+        </div>
+      </section>
 
-  // Create Triangles from points
-  // Logic: For every square in the grid, split it into 2 triangles
-  const triangleFragment = document.createDocumentFragment();
-  for (let y = 0; y < rows; y++) {
-    for (let x = 0; x < cols; x++) {
-      const p1 = points[y][x];         // Top-Left
-      const p2 = points[y][x+1];       // Top-Right
-      const p3 = points[y+1][x];       // Bottom-Left
-      const p4 = points[y+1][x+1];     // Bottom-Right
+      <!-- Skills Section -->
+      <section id="skills" class="section skills-section">
+        <div class="container section-header">
+          <p class="section-kicker">Skills</p>
+          <h2 class="section-title">Edit &amp; design toolkit</h2>
+        </div>
+        <div class="container skills-grid">
+          <div class="skills-bars">
+            <div class="skill-item" data-skill="Blender" data-percent="25">
+              <div class="skill-header">
+                <span class="skill-name">Blender</span>
+                <span class="skill-value">25%</span>
+              </div>
+              <div class="skill-bar">
+                <div class="skill-bar-fill"></div>
+              </div>
+            </div>
+            <div class="skill-item" data-skill="After Effects" data-percent="45">
+              <div class="skill-header">
+                <span class="skill-name">After Effects</span>
+                <span class="skill-value">45%</span>
+              </div>
+              <div class="skill-bar">
+                <div class="skill-bar-fill"></div>
+              </div>
+            </div>
+            <div class="skill-item" data-skill="Photoshop" data-percent="20">
+              <div class="skill-header">
+                <span class="skill-name">Photoshop</span>
+                <span class="skill-value">20%</span>
+              </div>
+              <div class="skill-bar">
+                <div class="skill-bar-fill"></div>
+              </div>
+            </div>
+          </div>
 
-      // Triangle 1 (Top-Left, Top-Right, Bottom-Left)
-      createTriangle(triangleFragment, p1, p2, p3);
+          <div class="tools-section">
+            <h3 class="tools-title">Tools I Use</h3>
+            <div class="tools-grid">
+              <div class="tool-item">
+                <div class="tool-icon blender">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0C5.37 0 0 5.37 0 12s5.37 12 12 12 12-5.37 12-12S18.63 0 12 0m0 3c4.97 0 9 4.03 9 9s-4.03 9-9 9-9-4.03-9-9 4.03-9 9-9m3.5 7c.83 0 1.5.67 1.5 1.5S16.33 13 15.5 13 14 12.33 14 11.5s.67-1.5 1.5-1.5m-7 0c.83 0 1.5.67 1.5 1.5S9.33 13 8.5 13 7 12.33 7 11.5 7.67 10 8.5 10m3.5 6c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3z"/>
+                  </svg>
+                </div>
+                <span class="tool-name">Blender</span>
+              </div>
+              <div class="tool-item">
+                <div class="tool-icon after-effects">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <rect x="2" y="2" width="20" height="20" rx="2" ry="2"/>
+                    <text x="12" y="16" text-anchor="middle" font-size="10" font-weight="bold" fill="white">AE</text>
+                  </svg>
+                </div>
+                <span class="tool-name">After Effects</span>
+              </div>
+              <div class="tool-item">
+                <div class="tool-icon photoshop">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <rect x="2" y="2" width="20" height="20" rx="2" ry="2"/>
+                    <text x="12" y="16" text-anchor="middle" font-size="10" font-weight="bold" fill="white">Ps</text>
+                  </svg>
+                </div>
+                <span class="tool-name">Photoshop</span>
+              </div>
+              <div class="tool-item">
+                <div class="tool-icon illustrator">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <rect x="2" y="2" width="20" height="20" rx="2" ry="2"/>
+                    <text x="12" y="16" text-anchor="middle" font-size="10" font-weight="bold" fill="white">Ai</text>
+                  </svg>
+                </div>
+                <span class="tool-name">Illustrator</span>
+              </div>
+              <div class="tool-item">
+                <div class="tool-icon premier-pro">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <rect x="2" y="2" width="20" height="20" rx="2" ry="2"/>
+                    <text x="12" y="16" text-anchor="middle" font-size="9" font-weight="bold" fill="white">Pr</text>
+                  </svg>
+                </div>
+                <span class="tool-name">Premiere Pro</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-      // Triangle 2 (Top-Right, Bottom-Right, Bottom-Left)
-      createTriangle(triangleFragment, p2, p4, p3);
-    }
-  }
-  container.appendChild(triangleFragment);
+      <!-- Future Sections Placeholder -->
+      <section id="future" class="section future-section">
+        <div class="container section-header">
+          <p class="section-kicker">Next</p>
+          <h2 class="section-title">Testimonials &amp; achievements</h2>
+          <p class="section-subtitle">
+            Reserve this space for client testimonials, awards, festival selections, or
+            view counts. Add cards or a carousel here when you’re ready.
+          </p>
+        </div>
+        <div class="container future-placeholder">
+          <div class="placeholder-card">
+            <p class="placeholder-label">Coming soon</p>
+            <p class="placeholder-text">
+              “Working with [Your Name] completely elevated our content. The pacing, music
+              choices, and transitions were spot on.”
+            </p>
+          </div>
+        </div>
+      </section>
 
-  document.body.prepend(container);
-}
+      <!-- Contact Section -->
+      <section id="contact" class="section contact-section">
+        <div class="container section-header">
+          <p class="section-kicker">Contact</p>
+          <h2 class="section-title">Let’s cut your next story</h2>
+          <p class="section-subtitle">
+            Tell me about your project, timeline, and goals. I’ll get back to you with
+            ideas and availability.
+          </p>
+        </div>
+        <div class="container contact-grid">
+          <div class="contact-info">
+            <div class="contact-item">
+              <span class="contact-label">Email</span>
+              <a href="mailto:krishnarayan400@gmail.com" class="contact-value"
+                >krishnarayan400@gmail.com</a
+              >
+            </div>
+            <div class="contact-item">
+              <span class="contact-label">Phone</span>
+              <a href="tel:+1234567890" class="contact-value">+91 9470594197</a>
+            </div>
+            <div class="contact-item">
+              <span class="contact-label">Social</span>
+              <div class="social-links">
+                <a href="https://www.instagram.com/red_thr3d/" target="_blank" rel="noopener">Instagram</a>
+                <a href="https://www.linkedin.com/in/krish-narayan-5354603a5/" target="_blank" rel="noopener">LinkedIn</a>
+                <a href="https://www.youtube.com/@Red_thr3d" target="_blank" rel="noopener">YouTube</a>
+              </div>
+            </div>
+          </div>
+          <form class="contact-form" autocomplete="on">
+            <div class="form-row">
+              <div class="form-field">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" placeholder="Red Thr3d" />
+              </div>
+              <div class="form-field">
+                <label for="email">Email</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  placeholder="you@example.com"
+                  required
+                />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-field">
+                <label for="phone">Phone</label>
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  placeholder="your number(optional)"
+                />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-field">
+                <label for="message">Project details</label>
+                <textarea
+                  id="message"
+                  name="message"
+                  rows="4"
+                  placeholder="Tell me about your project, references, and timeline."
+                ></textarea>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary form-submit">
+              Send Message
+            </button>
+            <p class="form-note">
+              This form is static by default. Connect it to your email or form service
+              (Netlify Forms, Formspree, etc.) after deployment.
+            </p>
+          </form>
+        </div>
+      </section>
+    </main>
 
-// Helper: Creates a DIV with a clip-path polygon
-function createTriangle(parent, p1, p2, p3) {
-  const div = document.createElement('div');
-  div.className = 'glass-poly';
-  
-  // Create polygon shape
-  // Note: We use fixed pixel values for precision, effectively overlaying the screen
-  const clipPath = `polygon(${p1.x}px ${p1.y}px, ${p2.x}px ${p2.y}px, ${p3.x}px ${p3.y}px)`;
-  div.style.clipPath = clipPath;
-  div.style.webkitClipPath = clipPath; // Safari support
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p>&copy; <span id="year"></span> Red Thr3d. All rights reserved.</p>
+        <a
+          href="#top"
+          class="back-to-top inline-flex items-center gap-1 hover:-translate-y-0.5 transition-transform duration-200"
+        >
+          Back to top
+        </a>
+      </div>
+    </footer>
 
-  // Randomize glass opacity slightly for depth effect
-  const opacity = 0.02 + Math.random() * 0.05;
-  div.style.background = `rgba(255, 255, 255, ${opacity})`;
+    <script src="script.js"></script>
+  </body>
+</html>
 
-  parent.appendChild(div);
-}
-
-// ---------------------------------------------------------
-// Animate Skill Bars (Optimized with Intersection Observer)
-// ---------------------------------------------------------
-
-let skillAnimationTriggered = false;
-
-function animateSkillBars() {
-  const skillContainer = document.querySelector('.skills-grid');
-  if (!skillContainer) return;
-  
-  const observer = new IntersectionObserver((entries) => {
-    if (entries[0].isIntersecting && !skillAnimationTriggered) {
-      skillAnimationTriggered = true;
-      observer.disconnect();
-      
-      // Animate linear bars
-      document.querySelectorAll('.skill-item').forEach(item => {
-        const percent = item.getAttribute('data-percent');
-        const barFill = item.querySelector('.skill-bar-fill');
-        if (barFill && percent) {
-          barFill.style.width = percent + '%';
-        }
-      });
-
-      // Animate circular progress rings
-      document.querySelectorAll('.radial-skill').forEach(item => {
-        const percent = item.getAttribute('data-percent');
-        const ringElement = item.querySelector('.radial-bar-ring');
-        if (ringElement && percent) {
-          const circumference = 376.99;
-          const fillLength = (percent / 100) * circumference;
-          ringElement.style.strokeDasharray = `${circumference}`;
-          ringElement.style.strokeDashoffset = `${circumference - fillLength}`;
-        }
-      });
-    }
-  }, { threshold: 0.1 });
-  
-  observer.observe(skillContainer);
-}
-
-// ---------------------------------------------------------
-// Animate Hero Text on Scroll (Optimized with RAF)
-// ---------------------------------------------------------
-
-let ticking = false;
-let lastScrollPosition = 0;
-
-function animateHeroText() {
-  const heroText = document.querySelector('.hero-overlay-text');
-  const heroSection = document.querySelector('.hero-image-wrapper');
-  
-  if (!heroText || !heroSection) return;
-  
-  function updateScroll() {
-    const heroHeight = window.innerHeight;
-    const progress = Math.max(0, Math.min(1, lastScrollPosition / (heroHeight * 0.75)));
-    const scale = 1 - (progress * 0.7);
-    const opacity = 1 - progress;
-    
-    heroText.style.transform = `translate(-50%, -50%) scale(${scale})`;
-    heroText.style.opacity = opacity;
-    ticking = false;
-  }
-  
-  window.addEventListener('scroll', () => {
-    lastScrollPosition = window.scrollY;
-    if (!ticking) {
-      window.requestAnimationFrame(updateScroll);
-      ticking = true;
-    }
-  }, { passive: true });
-}
-
-// Initialize on page load
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => {
-    animateHeroText();
-    animateSkillBars();
-    // Defer glass background to next frame for faster initial render
-    requestAnimationFrame(() => initGlassBackground());
-  });
-} else {
-  animateHeroText();
-  animateSkillBars();
-  requestAnimationFrame(() => initGlassBackground());
-}
